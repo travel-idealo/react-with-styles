@@ -75,7 +75,7 @@
     "react": ">=0.14"
   },
   "dependencies": {
-    "deepmerge": "^1.5.2",
+    "deepmerge": "^2.0.0",
     "global-cache": "^1.2.1",
     "hoist-non-react-statics": "^2.3.1",
     "prop-types": "^15.6.0"
