@@ -1,6 +1,6 @@
 {
   "name": "react-with-styles",
-  "version": "3.1.1",
+  "version": "3.2.1",
   "description": "",
   "main": "lib/withStyles.js",
   "directories": {
@@ -24,9 +24,12 @@
     "version:minor": "npm --no-git-tag-version version minor",
     "version:patch": "npm --no-git-tag-version version patch"
   },
+  "publishConfig": {
+    "registry": "https://repo.eu.idealo.com/artifactory/api/npm/npm-local"
+  },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/airbnb/react-with-styles.git"
+    "url": "git+https://github.com/travel-idealo/react-with-styles.git"
   },
   "keywords": [
     "react",
