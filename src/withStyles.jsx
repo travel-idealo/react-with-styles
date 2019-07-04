@@ -1,7 +1,8 @@
+/* eslint react/forbid-foreign-prop-types: off */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import hoistNonReactStatics from 'hoist-non-react-statics';
-import deepmerge from 'deepmerge';
 
 import { CHANNEL, DIRECTIONS } from 'react-with-direction/dist/constants';
 import brcastShape from 'react-with-direction/dist/proptypes/brcast';
@@ -18,6 +19,9 @@ export const withStylesPropTypes = {
 
 const EMPTY_STYLES = {};
 const EMPTY_STYLES_FN = () => EMPTY_STYLES;
+
+const START_MARK = 'react-with-styles.createStyles.start';
+const END_MARK = 'react-with-styles.createStyles.end';
 
 function baseClass(pureComponent) {
   if (pureComponent) {
@@ -83,9 +87,10 @@ export function withStyles(
     if (
       process.env.NODE_ENV !== 'production'
       && typeof performance !== 'undefined'
-      && performance.mark !== undefined
+      && performance.mark !== undefined && typeof performance.clearMarks === 'function'
     ) {
-      performance.mark('react-with-styles.createStyles.start');
+      performance.clearMarks(START_MARK);
+      performance.mark(START_MARK);
     }
 
     const isRTL = direction === DIRECTIONS.RTL;
@@ -109,15 +114,19 @@ export function withStyles(
     if (
       process.env.NODE_ENV !== 'production'
       && typeof performance !== 'undefined'
-      && performance.mark !== undefined
+      && performance.mark !== undefined && typeof performance.clearMarks === 'function'
     ) {
-      performance.mark('react-with-styles.createStyles.end');
+      performance.clearMarks(END_MARK);
+      performance.mark(END_MARK);
+
+      const measureName = `\ud83d\udc69\u200d\ud83c\udfa8 withStyles(${wrappedComponentName}) [create styles]`;
 
       performance.measure(
-        `\ud83d\udc69\u200d\ud83c\udfa8 withStyles(${wrappedComponentName}) [create styles]`,
-        'react-with-styles.createStyles.start',
-        'react-with-styles.createStyles.end',
+        measureName,
+        START_MARK,
+        END_MARK,
       );
+      performance.clearMarks(measureName);
     }
 
     return styleDef;
@@ -197,13 +206,13 @@ export function withStyles(
     WithStyles.displayName = `withStyles(${wrappedComponentName})`;
     WithStyles.contextTypes = contextTypes;
     if (WrappedComponent.propTypes) {
-      WithStyles.propTypes = deepmerge({}, WrappedComponent.propTypes);
+      WithStyles.propTypes = { ...WrappedComponent.propTypes };
       delete WithStyles.propTypes[stylesPropName];
       delete WithStyles.propTypes[themePropName];
       delete WithStyles.propTypes[cssPropName];
     }
     if (WrappedComponent.defaultProps) {
-      WithStyles.defaultProps = deepmerge({}, WrappedComponent.defaultProps);
+      WithStyles.defaultProps = { ...WrappedComponent.defaultProps };
     }
 
     return hoistNonReactStatics(WithStyles, WrappedComponent);
